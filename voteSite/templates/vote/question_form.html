@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h5>투표 등록</h5>
+    <form method="post" class="post-form my-3">
+        {% csrf_token % %}
+        {{form.as_p}}
+        <button type="submit">저장하기</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3">
+    <table class="table">
+        {% if question_list %}
+            <ul>
+                {% for question in question_list %}
+                   <li><a href="{% url 'vote:detail' question.id %}">{{ question.subject }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>투표가 없습니다.</p>
+        {% endif %}
+        <a herf="%url 'vote:question_create' %}" class="btn">투표 등록하기</a>
+    </table>>
+</div>>
+{% endblock %}

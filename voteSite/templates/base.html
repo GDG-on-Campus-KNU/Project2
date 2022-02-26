@@ -1,0 +1,24 @@
+{% load static %}
+<!doctype html>
+<html lang="ko">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Hello, pybo!</title>
+</head>
+<body>
+
+{% block content %}
+{% endblock %}
+<!-- 기본 템플릿 안에 삽입될 내용 -->
+<!-- jQuery -->
+<!--cript-- src="{% static 'jquery-3.4.1.min.js' %}"></script-->
+<!-- Bootstrap JS -->
+<!--script src="{% static 'bootstrap.min.js' %}"></script-->
+<!-- 자바스크립트 -->
+{% block script %}
+{% endblock %}
+<!-- 자바스크립트 -->
+</body>
+</html>
