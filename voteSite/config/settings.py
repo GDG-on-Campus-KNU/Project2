@@ -31,7 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'board.apps.BoardConfig',
+    'board',
+    'rest_framework',
     'vote.apps.VoteConfig',
     'django.contrib.admin',
     'django.contrib.auth',

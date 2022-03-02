@@ -7,5 +7,5 @@ from board import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('vote/', include('vote.urls')),
-    path('board/', include('board.urls'))
+    path('boards/', include('board.urls'))
 ]
