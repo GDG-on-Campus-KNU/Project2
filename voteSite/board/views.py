@@ -1,5 +1,13 @@
-from django.http import HttpResponse
+from .models import Board
+from .serializers import BoardSerializer
+from rest_framework import generics
 
 
-def index(request):
-    return HttpResponse("안녕하세요 pybo에 오신것을 환영합니다.")
+class BoardList(generics.ListCreateAPIView):
+    queryset = Board.objects.all()
+    serializer_class = BoardSerializer
+
+
+class BoardDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Board.objects.all()
+    serializer_class = BoardSerializer
