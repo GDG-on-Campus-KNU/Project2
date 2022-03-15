@@ -18,3 +18,4 @@ class BoardDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = BoardSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
+
