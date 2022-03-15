@@ -1,9 +1,7 @@
 from .models import Board
-from .serializers import BoardSerializer, UserSerializer
+from .serializers import BoardSerializer
 from rest_framework import generics, permissions
 from .permission import IsOwnerOrReadOnly
-
-from django.contrib.auth.models import User
 
 
 class BoardList(generics.ListCreateAPIView):
