@@ -1,25 +1,16 @@
-from django.http import JsonResponse
 from comments.models import Comment
 from comments.serializers import CommentSerializer
 from rest_framework import generics
 from rest_framework import permissions
 from users.models import Profile
 from comments.permissions import IsOwnerOrReadOnly
-from rest_framework.views import APIView
 
 
-class CommentList(generics.ListCreateAPIView):
+class CommentList(generics.ListAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
-
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
-        profile = Profile.objects.get(user=self.request.user)
-        profile.count+=1
-        profile.save()
-        print("----------", profile, profile.user,profile.count)
 
     def get_queryset(self):
         """
@@ -28,6 +19,20 @@ class CommentList(generics.ListCreateAPIView):
         """
         user = self.request.user
         return Comment.objects.filter(owner=user)
+
+
+class CommentCreate(generics.CreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user, board_id=self.kwargs['board_id'])
+        profile = Profile.objects.get(user=self.request.user)
+        profile.count+=1
+        profile.save()
+        print("----------&&&&&&&&&________________")
 
 
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
