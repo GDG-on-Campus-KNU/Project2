@@ -6,6 +6,7 @@ urlpatterns = [
     path('', views.CommentList.as_view()),
     path('<int:pk>/', views.CommentDetail.as_view()),
     path('all/', views.CommentAll.as_view()),
+    path('create/<int:board_id>/', views.CommentCreate.as_view()),
 
 ]
 
