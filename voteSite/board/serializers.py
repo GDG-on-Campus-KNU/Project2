@@ -8,4 +8,4 @@ class BoardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Board
-        fields = ['id', 'owner', 'author', 'category', 'createdAt', 'updatedAt', 'content', 'recommend']
+        fields = ['id', 'owner', 'author', 'category', 'image', 'createdAt', 'updatedAt', 'content', 'recommend']
