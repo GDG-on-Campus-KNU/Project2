@@ -21,6 +21,14 @@ class CommentList(generics.ListCreateAPIView):
         profile.save()
         print("----------", profile, profile.user,profile.count)
 
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases
+        for the currently authenticated user.
+        """
+        user = self.request.user
+        return Comment.objects.filter(owner=user)
+
 
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
@@ -34,3 +42,10 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
         profile.count-=1
         profile.save()
         serializer.delete()
+
+
+class CommentAll(generics.ListAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly]
