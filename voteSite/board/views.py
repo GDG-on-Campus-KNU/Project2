@@ -1,4 +1,4 @@
-from .models import Board
+from .models import Board, Choice
 from .serializers import BoardSerializer
 from rest_framework import generics, permissions
 from .permission import IsOwnerOrReadOnly
@@ -15,7 +15,6 @@ class BoardList(generics.ListCreateAPIView):
 
 class BoardDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Board.objects.all()
+    choiceset = Choice.objects.all()
     serializer_class = BoardSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-
-
