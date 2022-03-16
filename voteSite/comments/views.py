@@ -6,7 +6,7 @@ from users.models import Profile
 from comments.permissions import IsOwnerOrReadOnly
 
 
-class CommentList(generics.ListAPIView):
+class CommentList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
@@ -20,15 +20,8 @@ class CommentList(generics.ListAPIView):
         user = self.request.user
         return Comment.objects.filter(owner=user)
 
-
-class CommentCreate(generics.CreateAPIView):
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly]
-
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user, board_id=self.kwargs['board_id'])
+        serializer.save(owner=self.request.user)
         profile = Profile.objects.get(user=self.request.user)
         profile.count+=1
         profile.save()
