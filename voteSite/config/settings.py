@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'users',
     'comments',
     'board',
+    'auth_token'
 ]
 
 MIDDLEWARE = [
