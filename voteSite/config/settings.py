@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'users',
     'comments',
-    'board',
+    'boards',
 ]
 
 MIDDLEWARE = [
