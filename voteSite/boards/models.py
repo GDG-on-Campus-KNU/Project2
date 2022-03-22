@@ -10,7 +10,7 @@ class Board(models.Model):
     owner = models.ForeignKey('auth.user', related_name='owner_board', on_delete=models.CASCADE)
     liker = models.ManyToManyField('auth.user', related_name='liker_board')
     likeCount = models.IntegerField(default=0)
-    votedIndex=models.IntegerField(default=0)
+    votedIndex=models.IntegerField(default=-1)
     voteText = models.CharField(max_length=200)
 
     class Meta:

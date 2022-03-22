@@ -25,11 +25,19 @@ class BoardDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = BoardSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
-    # def perform_update(self, serializer):
-    #     board_id = self.kwargs['pk']
-    #     current_board=Board.objects.get(id=board_id)
-    #     current_board.likeCount= current_board.liker.all().count()
-    #     current_board.save()
+    def get_object(self):
+        queryset=self.get_queryset()
+        obj = queryset.get(pk=self.kwargs.get('pk'))
+        vote_models = Vote.objects.filter(boardId=self.kwargs.get('pk'))
+        obj.votedIndex=-1
+        print(self.request.user.is_authenticated)
+        if self.request.user.is_authenticated:
+            for ind, vote_model in enumerate(vote_models):
+                if self.request.user in vote_model.voter.all():
+                    obj.votedIndex=ind
+                    break
+            obj.save()
+        return obj
 
 
 class LikeBoard(APIView):
@@ -37,9 +45,7 @@ class LikeBoard(APIView):
 
     def post(self, request, pk):
         # print(request.get_full_path())
-        board_id = pk
-        print(board_id)
-        current_board=Board.objects.get(boardId=self.request.i)
+        current_board=Board.objects.get(id=pk)
         like_count_before=current_board.liker.all().count()
         current_board.liker.add(self.request.user)
         current_board.likeCount = current_board.liker.all().count()
@@ -64,11 +70,10 @@ class VoteBoard(APIView):
             if self.request.user in vote_model.voter.all():
                 vote_model.voter.remove(self.request.user)
                 vote_texts[ind][1]-=1
-            if ind==index:
+            elif ind==index:
                 vote_model.voter.add(self.request.user)
                 vote_texts[ind][1]+=1
             vote_model.save()
         board_model.voteText=str(vote_texts)
-        print(board_model.voteText, vote_texts)
         board_model.save()
         return Response(board_model.voteText)
