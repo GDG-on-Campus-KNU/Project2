@@ -13,10 +13,6 @@ class CommentList(generics.ListCreateAPIView):
                           IsOwnerOrReadOnly]
 
     def get_queryset(self):
-        """
-        This view should return a list of all the purchases
-        for the currently authenticated user.
-        """
         user = self.request.user
         return Comment.objects.filter(owner=user)
 

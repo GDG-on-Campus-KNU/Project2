@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 
     'users',
     'comments',
-    'board',
+    'boards',
     'auth_token'
 ]
 
