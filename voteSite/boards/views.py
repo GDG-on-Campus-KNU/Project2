@@ -1,4 +1,9 @@
 import ast
+import datetime
+
+import date_range as date_range
+from django.utils import timezone
+
 from .models import Board, Vote
 from .serializers import BoardSerializer
 from rest_framework import generics, permissions
@@ -77,3 +82,18 @@ class VoteBoard(APIView):
         board_model.voteText=str(vote_texts)
         board_model.save()
         return Response(board_model.voteText)
+
+
+class HotBoard(generics.ListAPIView):
+    serializer_class = BoardSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        # timezone 이 조금 달라서, 15시간 전이 24시간 전까지 임. 3일 전까지로 하려면 days 를 2로 해야 함
+        queryset = Board.objects.filter(createdAt__gte=(timezone.now() - datetime.timedelta(days=2,hours=15)))
+        print(timezone.now() - datetime.timedelta(days=0,hours=15))
+        queryset = queryset.order_by('-likeCount')[0:5]
+        print(queryset)
+        return queryset
+
+
