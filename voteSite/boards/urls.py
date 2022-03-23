@@ -12,4 +12,3 @@ urlpatterns = [
     path('<int:pk>/like/', LikeBoard.as_view()),
     path('<int:pk>/vote/', VoteBoard.as_view()),
 ]
-
