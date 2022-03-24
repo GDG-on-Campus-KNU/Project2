@@ -16,7 +16,7 @@ class Board(models.Model):
     voteText = models.CharField(max_length=200)
 
     class Meta:
-        ordering = ['createdAt']
+        ordering = ['-createdAt']
 
 
 class Vote(models.Model):
