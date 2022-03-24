@@ -73,23 +73,25 @@ class VoteBoard(APIView):
         vote_models=Vote.objects.filter(boardId=pk)
         board_model=Board.objects.get(id=pk)
         vote_texts = ast.literal_eval(board_model.voteText)
-
+        if pk in boardList:
+            boardList.remove(pk)
         for ind, vote_model in enumerate(vote_models):
             if self.request.user in vote_model.voter.all():
                 vote_model.voter.remove(self.request.user)
                 vote_texts[ind][1]-=1
-                boardList.remove(pk)
             elif ind==index:
                 vote_model.voter.add(self.request.user)
                 vote_texts[ind][1]+=1
-                try :
+                '''try :
                     boardList.pop(4)
                 except:
-                    pass
+                    pass'''
                 boardList.insert(0, pk)
-                request.user.profile.boardList = str(boardList)
+
 
             vote_model.save()
+            print("test3", boardList)
+            request.user.profile.boardList = str(boardList)
             request.user.profile.save()
         board_model.voteText=str(vote_texts)
         board_model.save()
