@@ -11,4 +11,6 @@ urlpatterns = [
     path('<int:pk>/', BoardDetail.as_view()),
     path('<int:pk>/like/', LikeBoard.as_view()),
     path('<int:pk>/vote/', VoteBoard.as_view()),
+
+    path('hot/', HotBoard.as_view()),
 ]

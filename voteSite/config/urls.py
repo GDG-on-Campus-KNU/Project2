@@ -38,6 +38,8 @@ urlpatterns = [
     re_path(r'^swagger/$', schema_view_v1.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     re_path(r'^redoc/$', schema_view_v1.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
+    path('api/', include('auth_token.urls'))
+
 ]
 urlpatterns += [
     path('api-auth/', include('rest_framework.urls')),
