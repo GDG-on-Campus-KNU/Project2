@@ -20,6 +20,10 @@ class BoardList(generics.ListCreateAPIView):
     serializer_class = BoardSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+    def get_queryset(self):
+        user = self.request.user
+        return Board.objects.filter(owner=user)
+
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
         vote_texts=ast.literal_eval(serializer.data['voteText'])
