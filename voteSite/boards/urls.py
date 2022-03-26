@@ -3,6 +3,7 @@ from .views import *
 
 urlpatterns = [
     path('', BoardList.as_view()),
+    path('my', MyBoardList.as_view()),
 
     path('love', LoveBoardList.as_view()),
     path('travel', TravelBoardList.as_view()),

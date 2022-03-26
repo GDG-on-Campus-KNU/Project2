@@ -1,7 +1,6 @@
 import ast
 import datetime
 
-import date_range as date_range
 from django.utils import timezone
 
 from .models import Board, Vote
@@ -12,6 +11,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.conf import settings
 from django.db import models
+from users.models import Profile
 
 
 
@@ -27,6 +27,14 @@ class BoardList(generics.ListCreateAPIView):
         for ind,text in enumerate(vote_texts):
             Vote.objects.create(content=text[0],boardId=Board.objects.latest('id'),indexInBoard=ind)
 
+class MyBoardList(generics.ListAPIView):
+    queryset = Board.objects.all()
+    serializer_class = BoardSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Board.objects.filter(owner=user)
 
 class BoardDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Board.objects.all()

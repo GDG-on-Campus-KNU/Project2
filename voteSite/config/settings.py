@@ -41,11 +41,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
-
     'users',
     'comments',
     'boards',
-    'auth_token'
+    'auth_token',
     'drf_yasg',
 ]
 
