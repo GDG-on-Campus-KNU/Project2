@@ -7,8 +7,5 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ['id', 'title', 'code', 'owner', 'boardId','createdAt',]
-
-
-
+        fields = ['id', 'content', 'owner', 'boardId']
 
