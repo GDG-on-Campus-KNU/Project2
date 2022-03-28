@@ -5,6 +5,12 @@ from rest_framework import permissions
 from users.models import Profile
 from comments.permissions import IsOwnerOrReadOnly
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.conf import settings
+from django.db import models
+
+
 
 class CommentList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
@@ -12,9 +18,9 @@ class CommentList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
 
-    def get_queryset(self):
-        user = self.request.user
-        return Comment.objects.filter(owner=user)
+#    def get_queryset(self):
+ #       user = self.request.user
+  #      return Comment.objects.filter(owner=user)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
