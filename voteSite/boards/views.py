@@ -1,7 +1,6 @@
 import ast
 import datetime
 
-import date_range as date_range
 from django.utils import timezone
 
 from .models import Board, Vote

@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'users',
     'comments',
     'boards',
-    'auth_token'
+    'auth_token',
     'drf_yasg',
 ]
 
