@@ -13,6 +13,7 @@ schema_url_patterns = [
     path('', include('users.urls')),
     path('comments/', include('comments.urls')),
     path('boards/', include('boards.urls')),
+    path('api/', include('auth_token.urls'))
 ]
 
 schema_view_v1 = get_schema_view(
@@ -39,7 +40,6 @@ urlpatterns = [
     re_path(r'^redoc/$', schema_view_v1.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
     path('api/', include('auth_token.urls'))
-
 ]
 urlpatterns += [
     path('api-auth/', include('rest_framework.urls')),
