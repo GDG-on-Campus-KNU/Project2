@@ -13,6 +13,7 @@ schema_url_patterns = [
     path('', include('users.urls')),
     path('comments/', include('comments.urls')),
     path('boards/', include('boards.urls')),
+    path('api/', include('auth_token.urls'))
 ]
 
 schema_view_v1 = get_schema_view(
