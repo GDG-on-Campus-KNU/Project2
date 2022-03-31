@@ -14,7 +14,6 @@ from django.conf import settings
 from django.db import models
 
 
-
 class CommentList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
@@ -34,7 +33,6 @@ class CommentList(generics.ListCreateAPIView):
                 arr.append(comment.boardId.id)
         preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(arr)])
         return Board.objects.filter(pk__in=arr).order_by(preserved)
-
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
