@@ -14,10 +14,8 @@ urlpatterns = [
 
 urlpatterns += [
     path("docs/json/", SpectacularJSONAPIView.as_view(), name="schema-json"),
-    # path('schema/', SpectacularAPIView.as_view(), name='schema'),
-    # path('schema/user', SpectacularAPIView.as_view(), name='user_schema'),
-    path('schema/swagger/', SpectacularSwaggerView.as_view(url_name='schema-json'), name='swagger-ui'),
-    path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema-json'), name='redoc'),
+    path('swagger/', SpectacularSwaggerView.as_view(url_name='schema-json'), name='swagger-ui'),
+    path('redoc/', SpectacularRedocView.as_view(url_name='schema-json'), name='redoc'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
