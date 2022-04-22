@@ -9,3 +9,6 @@ JWT기반 인증을 포함하고 있습니다.
 - django-simplejwt
 - swagger(openDocs 3.0)
 - Docker
+
+# 실행방법
+`$python manage.py server run`
