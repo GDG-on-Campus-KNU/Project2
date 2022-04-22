@@ -2,16 +2,17 @@ import ast
 import datetime
 
 from django.utils import timezone
-
+from comments.models import Comment
+from comments.serializers import CommentSerializer
 from .models import Board, Vote
 from .serializers import BoardSerializer
 from rest_framework import generics, permissions
 from .permission import IsOwnerOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.db.models import Case, When
 from django.conf import settings
 from django.db import models
-
 
 
 class BoardList(generics.ListCreateAPIView):
@@ -67,18 +68,13 @@ class VoteBoard(APIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def post(self, request, pk):
-        boardList = ast.literal_eval(request.user.profile.boardList)
-
-       # print("this is request", request.user.profile.boardList)
-
-        #print(request.get_full_path())
-        index=request.data['index']
-        print(request.data['index'])
+        user_voted_board_list= ast.literal_eval(request.user.profile.votedBoards)
+        index=int(request.data['index'])
         vote_models=Vote.objects.filter(boardId=pk)
         board_model=Board.objects.get(id=pk)
         vote_texts = ast.literal_eval(board_model.voteText)
-        if pk in boardList:
-            boardList.remove(pk)
+        if pk in user_voted_board_list:
+            user_voted_board_list.remove(pk)
         for ind, vote_model in enumerate(vote_models):
             if self.request.user in vote_model.voter.all():
                 vote_model.voter.remove(self.request.user)
@@ -86,30 +82,26 @@ class VoteBoard(APIView):
             elif ind==index:
                 vote_model.voter.add(self.request.user)
                 vote_texts[ind][1]+=1
-                '''try :
-                    boardList.pop(4)
-                except:
-                    pass'''
-                boardList.insert(0, pk)
-
-
+                user_voted_board_list.insert(0, pk)
             vote_model.save()
-            print("test3", boardList)
-            request.user.profile.boardList = str(boardList)
+            request.user.profile.votedBoards = str(user_voted_board_list)
             request.user.profile.save()
         board_model.voteText=str(vote_texts)
         board_model.save()
         return Response(board_model.voteText)
+
 
 class LoveBoardList(generics.ListAPIView):
     queryset = Board.objects.filter(category="Love")
     serializer_class = BoardSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
+
 class TravelBoardList(generics.ListAPIView):
     queryset = Board.objects.filter(category="Travel")
     serializer_class = BoardSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
 
 class FashionBoardList(generics.ListAPIView):
     queryset = Board.objects.filter(category="Fashion")
@@ -130,3 +122,36 @@ class HotBoard(generics.ListAPIView):
         return queryset
 
 
+class MyBoardList(generics.ListCreateAPIView):
+    serializer_class = BoardSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Board.objects.filter(owner=user)
+        return queryset
+
+
+class CommentList(generics.ListAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        queryset = Comment.objects.filter(boardId=self.kwargs['pk']).reverse()
+        return queryset
+
+
+class RecentlyVotedBoardList(generics.ListCreateAPIView):
+    serializer_class = BoardSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        user_voted_board_list= ast.literal_eval(self.request.user.profile.votedBoards)
+        boards = Board.objects.filter(id__in=user_voted_board_list)
+        print(boards)
+        # arr = []
+        # for board in boards:
+        #     if board.id not in arr:
+        #         arr.append(board.id)
+        # preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(arr)])
+        return boards
