@@ -10,22 +10,21 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('boards', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Comment',
+            name='Profile',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('count', models.IntegerField(default=0)),
                 ('createdAt', models.DateTimeField(auto_now_add=True)),
-                ('content', models.TextField()),
-                ('boardId', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comment_board_id', to='boards.board')),
-                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='owner_comment', to=settings.AUTH_USER_MODEL)),
+                ('boardList', models.CharField(max_length=50, null=True)),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'ordering': ['-createdAt'],
+                'ordering': ['createdAt'],
             },
         ),
     ]
