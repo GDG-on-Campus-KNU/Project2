@@ -2,10 +2,6 @@ from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
-
-from drf_yasg.utils import swagger_auto_schema
 from rest_framework import serializers, status
 # from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.views import (
