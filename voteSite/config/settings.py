@@ -188,6 +188,13 @@ REST_FRAMEWORK = {
     ),
 }
 
-CORS_ALLOWED_ORIGINS = ["*"]
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://13.124.255.171:8000',
+    'https://13.124.255.171:8000',
+    'https://dlg9y3y8hk6f2.cloudfront.net/',
+    'http://boat-vote-fe.s3-website.ap-northeast-2.amazonaws.com/'
+]
 
 CORS_ALLOW_CREDENTIALS = True
