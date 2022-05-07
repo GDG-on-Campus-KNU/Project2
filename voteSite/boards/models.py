@@ -4,7 +4,6 @@ from django.db import models
 class Board(models.Model):
     categoryType = models.TextChoices('categoryType', "Love Travel Fashion")
     category = models.CharField(choices=categoryType.choices, max_length=10)
-
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
@@ -14,6 +13,8 @@ class Board(models.Model):
     likeCount = models.IntegerField(default=0)
     votedIndex=models.IntegerField(default=-1)
     voteText = models.CharField(max_length=200)
+    voteTotal=models.IntegerField(default=0)
+    currentUser = models.TextField(default="None")
 
     class Meta:
         ordering = ['-createdAt']
