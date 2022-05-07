@@ -6,19 +6,36 @@ from comments.models import Comment
 from comments.serializers import CommentSerializer
 from .models import Board, Vote
 from .serializers import BoardSerializer
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 from .permission import IsOwnerOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Case, When
 from django.conf import settings
 from django.db import models
+from django.db.models import FloatField
+from django.db.models.functions import Cast
 
 
 class BoardList(generics.ListCreateAPIView):
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        query=Board.objects.all()
+        # 만약 모든 object 에 대해 votedIndex 를 -1로 바꾸느라 시간이 너무 오래 걸리면 여기서 밑에까지 지우면 된다.
+        vote_models = Vote.objects.filter(voter=self.request.user)
+        for q in query:
+            q.votedIndex=-1
+        Board.objects.bulk_update(query, ['votedIndex'])
+        query=Board.objects.all()
+        for vote_model in vote_models:
+            tt=query.get(pk=int(str(vote_model.boardId)[14:-1]))
+            tt.votedIndex=vote_model.indexInBoard
+            tt.save()
+        # 여기까지
+        return query
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -38,7 +55,7 @@ class BoardDetail(generics.RetrieveUpdateDestroyAPIView):
         obj = queryset.get(pk=self.kwargs.get('pk'))
         vote_models = Vote.objects.filter(boardId=self.kwargs.get('pk'))
         obj.votedIndex=-1
-        print(self.request.user.is_authenticated)
+        obj.currentUser=str(self.request.user)
         if self.request.user.is_authenticated:
             for ind, vote_model in enumerate(vote_models):
                 if self.request.user in vote_model.voter.all():
@@ -46,6 +63,12 @@ class BoardDetail(generics.RetrieveUpdateDestroyAPIView):
                     break
             obj.save()
         return obj
+
+    def destroy(self, request, *args, **kwargs):
+        if self.request.user == self.get_object().owner:
+            self.get_object().delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class LikeBoard(APIView):
@@ -74,6 +97,7 @@ class VoteBoard(APIView):
         board_model=Board.objects.get(id=pk)
         vote_texts = ast.literal_eval(board_model.voteText)
         if pk in user_voted_board_list:
+            board_model.voteTotal-=1
             user_voted_board_list.remove(pk)
         for ind, vote_model in enumerate(vote_models):
             if self.request.user in vote_model.voter.all():
@@ -83,9 +107,10 @@ class VoteBoard(APIView):
                 vote_model.voter.add(self.request.user)
                 vote_texts[ind][1]+=1
                 user_voted_board_list.insert(0, pk)
+                board_model.voteTotal+=1
             vote_model.save()
-            request.user.profile.votedBoards = str(user_voted_board_list)
-            request.user.profile.save()
+        request.user.profile.votedBoards = str(user_voted_board_list)
+        request.user.profile.save()
         board_model.voteText=str(vote_texts)
         board_model.save()
         return Response(board_model.voteText)
