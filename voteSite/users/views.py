@@ -22,6 +22,16 @@ class UserDetail(generics.RetrieveAPIView):
     serializer_class = UserSerializer
 
 
+class UserCurrent(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        obj = queryset.get(username=self.request.user)
+        return obj
+
+
 class UserDelete(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
