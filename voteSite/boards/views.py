@@ -44,6 +44,13 @@ class BoardList(generics.ListCreateAPIView):
         for ind,text in enumerate(vote_texts):
             Vote.objects.create(content=text[0],boardId=Board.objects.latest('id'),indexInBoard=ind)
 
+class BoardCategoryList(generics.ListAPIView):
+    serializer_class = BoardSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        query=Board.objects.filter(category=self.kwargs.get('word'))
+        return query
 
 class BoardDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Board.objects.all()
@@ -116,22 +123,6 @@ class VoteBoard(APIView):
         return Response(board_model.voteText)
 
 
-class LoveBoardList(generics.ListAPIView):
-    queryset = Board.objects.filter(category="Love")
-    serializer_class = BoardSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-
-class TravelBoardList(generics.ListAPIView):
-    queryset = Board.objects.filter(category="Travel")
-    serializer_class = BoardSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-
-class FashionBoardList(generics.ListAPIView):
-    queryset = Board.objects.filter(category="Fashion")
-    serializer_class = BoardSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class HotBoard(generics.ListAPIView):
