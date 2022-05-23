@@ -44,6 +44,7 @@ class BoardList(generics.ListCreateAPIView):
         for ind,text in enumerate(vote_texts):
             Vote.objects.create(content=text[0],boardId=Board.objects.latest('id'),indexInBoard=ind)
 
+
 class BoardCategoryList(generics.ListAPIView):
     serializer_class = BoardSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
@@ -51,6 +52,7 @@ class BoardCategoryList(generics.ListAPIView):
     def get_queryset(self):
         query=Board.objects.filter(category=self.kwargs.get('word'))
         return query
+
 
 class BoardDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Board.objects.all()
@@ -76,6 +78,12 @@ class BoardDetail(generics.RetrieveUpdateDestroyAPIView):
             self.get_object().delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+    def perform_destroy(self, instance):
+        if self.request.user==instance.owner:
+            instance.delete()
+        else:
+            return Response("Invalid access")
 
 
 class LikeBoard(APIView):
@@ -121,8 +129,6 @@ class VoteBoard(APIView):
         board_model.voteText=str(vote_texts)
         board_model.save()
         return Response(board_model.voteText)
-
-
 
 
 class HotBoard(generics.ListAPIView):
