@@ -138,7 +138,9 @@ class HotBoard(generics.ListAPIView):
     def get_queryset(self):
         # timezone 이 조금 달라서, 15시간 전이 24시간 전까지 임. 3일 전까지로 하려면 days 를 2로 해야 함
         queryset = Board.objects.filter(createdAt__gte=(timezone.now() - datetime.timedelta(days=2,hours=15)))
-        queryset = queryset.order_by('-voteTotal')[0:5]
+        print(timezone.now() - datetime.timedelta(days=0,hours=15))
+        queryset = queryset.order_by('-likeCount')[0:5]
+        print(queryset)
         return queryset
 
 
