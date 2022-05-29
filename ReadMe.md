@@ -5,6 +5,8 @@ JWT기반 인증을 포함하고 있습니다.
 
 # 주요 기능
 - 회원, 보드, 댓글 CRUD
+- JWT기반의 회원 인증
+- OpenDocs3.0 기반 Swagger API를 통한 문서화
 
 # 기술스택
 - Django
