@@ -35,8 +35,9 @@ We used a OpenDocs3.0 based `Swagger API`. You can access docs with the below pa
 
 `http://0.0.0.0:8000/redoc/`
 
-http://3.39.167.118:8000/swagger/
-http://3.39.167.118:8000/redoc/
+http://3.39.167.118:8000/swagger/  
+
+http://3.39.167.118:8000/redoc/  
 
 # Contribution
 ### [남도하] (waroad)
