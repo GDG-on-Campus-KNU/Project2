@@ -3,6 +3,8 @@ Boat-Vote 서비스는 투표기반 SNS입니다.
 django-rest-framework를 사용하여 RESTful API기반으로 제작되었습니다.
 JWT기반 인증을 포함하고 있습니다.
 
+FE Repo: https://github.com/GDSC-KNU/Project2-FE/
+
 # 주요 기능
 - 회원, 보드, 댓글 CRUD
 - JWT기반의 회원 인증
