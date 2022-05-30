@@ -1,4 +1,4 @@
-# Boat-Vote
+mote https://github.com/GDSC-KNU/Project2.git# Boat-Vote
 Boat-Vote 서비스는 투표기반 SNS입니다.
 django-rest-framework를 사용하여 RESTful API기반으로 제작되었습니다.
 JWT기반 인증을 포함하고 있습니다.
@@ -43,4 +43,10 @@ We used a OpenDocs3.0 based `Swagger API`. You can access docs with the below pa
 - Docker image 관리
 - AWS EC2로 배포
 
-### [오영선]
+### [오영선] (oyoungsun) 
+- 2.0 Swagger API 추가 
+- API 명세서 작성 
+- view 일부 기능 구현 
+    - Board 
+        LastVoted, MyBoard, Category별 조회 
+    - User 기본 이미지
