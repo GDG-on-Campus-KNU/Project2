@@ -1,3 +1,5 @@
+![header](https://user-images.githubusercontent.com/88179771/170953744-82d09a0b-13a4-45e0-ad23-d298c7e5c606.png)
+
 mote https://github.com/GDSC-KNU/Project2.git# Boat-Vote
 Boat-Vote 서비스는 투표기반 SNS입니다.
 django-rest-framework를 사용하여 RESTful API기반으로 제작되었습니다.
